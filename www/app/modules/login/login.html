@@ -1,0 +1,32 @@
+<ion-view id="login" class="content">
+	<ion-content scroll="false">
+		<div class="text-center">
+			<img class="logo" src="images/logo.png">
+		</div>
+		<div class="row text-center reset">
+			<div class="list list-inset col clear reset">
+				<label class="item item-input">
+					<i class="icon ion-person placeholder-icon"></i>
+					<input type="text" id="username" class="username inverse" maxlength="50" max-length-handler translate translate-attr-placeholder="usernameLabel" />
+				</label>
+				<label class="item item-input">
+					<i class="icon ion-locked placeholder-icon"></i>
+					<input type="password" id="password" class="password inverse" maxlength="50" max-length-handler translate translate-attr-placeholder="passwordLabel" />
+				</label>
+			</div>
+		</div>
+		
+		<button class="button button-clear button-full loginBtn" ng-click="authenticateUser()">
+			<i class="icon ion-android-exit"></i><span translate="loginBtn">LOGIN</span>
+		</button>
+		
+		<select id="languageOptn">
+			<option value="en">English</option>
+			<option value="hi">Hindi</option>
+		</select>
+		
+		<button class="button button-clear button-full loginBtn hidden" id="signInWithGoogleBtn" ng-click="signInWithGoogle()" style="margin-top: 1em;">
+			SIGN IN WITH GOOGLE
+		</button>
+	</ion-content>
+</ion-view>

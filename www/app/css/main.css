@@ -1,0 +1,43 @@
+
+#floating-menu li {
+    background-color: #2ac9aa;
+}
+
+#floating-menu .icon.menu-icon {
+    font-size: 26px;
+}
+
+#floating-menu li span.label-container {
+    width: 200px;
+}
+
+#floating-menu li span.label {
+    color: #FFF;
+    background-color: #2ac9aa;
+    padding: 6px 10px;
+    box-shadow: none;
+}
+
+
+.QRBarcodeHistory .item-icon-left .icon:before, .QRBarcodeHistory .item-icon-right .icon:before {
+    display: block;
+    width: 32px;
+    text-align: center;
+}
+
+.QRBarcodeHistory .item-icon-left .icon, .QRBarcodeHistory .item-icon-right .icon {
+	font-size: 26px;
+	color: #53b7e2;	
+}
+
+.QRBarcodeHistory .icon.ion-ios-arrow-right {
+	font-size: 20px;
+}
+
+.QRBarcodeHistory .item-icon-left {
+    padding-left: 40px;
+}
+
+.QRBarcodeHistory  .list .item {
+    margin: 10px 0px;
+}

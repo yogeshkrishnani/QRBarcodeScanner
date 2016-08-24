@@ -1,0 +1,45 @@
+<ion-view class="content"> 
+	<ion-nav-title class="long-title">DASHBOARD</ion-nav-title>
+	
+	<ion-content class="dashboard">
+		   
+		<ion-list class="QRBarcodeHistory" show-delete="false" show-reorder="false">
+
+			<ion-item ng-repeat="barcodeItem in barcodeItems"  item="item" class="item-remove-animate" ng-click="showBarcodeDetails(barcodeItem)">
+				
+				<div class="item-icon-left">
+					<i ng-class="{
+						'ion-information': barcodeItem.category == BARCODE_CATEGORIES.TEXT,
+						'ion-email': barcodeItem.category == BARCODE_CATEGORIES.EMAIL,
+						'ion-android-textsms': barcodeItem.category == BARCODE_CATEGORIES.SMS,
+						'ion-link': barcodeItem.category == BARCODE_CATEGORIES.WEBLINK,
+						'ion-android-contact': barcodeItem.category == BARCODE_CATEGORIES.VCARD						
+					} " class="icon"></i>
+					<p ng-if="barcodeItem.category != BARCODE_CATEGORIES.WEBLINK">{{ barcodeItem.title }}</p>
+					<a ng-if="barcodeItem.category == BARCODE_CATEGORIES.WEBLINK" href="#" ng-click="openExternalUrl(barcodeItem.title, $event)">{{ barcodeItem.title }}</a>
+				</div>
+				<div class="item-icon-right">
+					<i class="icon ion-ios-arrow-right"></i>
+				</div>				
+				<ion-delete-button class="ion-minus-circled"  ng-click="onItemDelete(item)">
+				</ion-delete-button>
+				<!-- <ion-option-button class="button-assertive" ng-click="edit(item)">
+					Edit
+				</ion-option-button>
+				<ion-option-button class="button-calm" ng-click="share(item)">
+					Share
+				</ion-option-button> -->
+				<ion-reorder-button class="ion-navicon" on-reorder="moveItem(barcodeItem, $fromIndex, $toIndex)"></ion-reorder-button>
+			</ion-item>
+
+      </ion-list>
+	  
+	  
+	  
+	</ion-content> 
+	
+	<ion-floating-menu>
+    	<ion-floating-item icon="ion-camera inverse" click="scanBarcode()" text="Scan through camera"></ion-floating-item>
+	</ion-floating-menu>
+		
+</ion-view>

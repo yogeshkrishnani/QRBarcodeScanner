@@ -1,0 +1,36 @@
+<ion-view class="content" hide-back-button="{{hideBackButton}}" > 
+	<ion-nav-title class="long-title">Details</ion-nav-title>
+	<ion-content class="barcodeDetails">
+		<div class="padding10" ng-if="barcodeItem.category == BARCODE_CATEGORIES.TEXT">
+			<p class="mrgTp10">{{barcodeItem.title}}</p>
+		</div>
+		<div class="padding10" ng-if="barcodeItem.category == BARCODE_CATEGORIES.WEBLINK">
+			<a href="#" ng-click="openExternalUrl(barcodeItem.title, $event)">{{ barcodeItem.title }}</a>
+			<p class="mrgTp10">{{barcodeItem.pageName}}</p>
+		</div>
+		<div class="padding10" ng-if="barcodeItem.category == BARCODE_CATEGORIES.EMAIL">
+			<p class="mrgTp10">Email</p>
+			<p class="mrgTp10">To : {{barcodeItem.emailFields.to}}</p>
+			<p class="mrgTp10">Subject : {{barcodeItem.emailFields.sub}}</p>
+			<p class="mrgTp10">Body : {{barcodeItem.emailFields.body}}</p>
+			<a href="mailto:{{barcodeItem.emailFields.to}}?subject={{barcodeItem.emailFields.sub}}&body={{barcodeItem.emailFields.body}}">SEND</a>
+		</div>
+		<div class="padding10" ng-if="barcodeItem.category == BARCODE_CATEGORIES.SMS">
+			<p class="mrgTp10">SMS</p>
+			<p class="mrgTp10">To : {{barcodeItem.smsFields.to}}</p>
+			<p class="mrgTp10">Message : {{barcodeItem.smsFields.msg}}</p>
+			<a href="sms:{{barcodeItem.smsFields.to}}?body={{barcodeItem.smsFields.msg}}">SEND</a>
+		</div>
+		<div class="padding10" ng-if="barcodeItem.category == BARCODE_CATEGORIES.VCARD">
+			<p class="mrgTp10">VCARD</p>
+			<p class="mrgTp10">Name : {{barcodeItem.title}}</p>
+			<p class="mrgTp10">Address : {{barcodeItem.formattedDetails.address}}</p>
+			<p class="mrgTp10">Title : {{barcodeItem.vCardFields.title}} At {{barcodeItem.vCardFields.org}}</p>
+			<p class="mrgTp10 bold">Email : <span ng-if="barcodeItem.formattedDetails.emailIdArray.length < 2"> <a href="mailto:{{barcodeItem.formattedDetails.emailIdArray[0].emailId}}">{{ barcodeItem.formattedDetails.emailIdArray[0].emailId }} </a> </span> </p>
+			<div ng-if="barcodeItem.formattedDetails.emailIdArray.length > 1" ng-repeat="emailDetail in barcodeItem.formattedDetails.emailIdArray track by $index">
+				<span> {{$index+1}}] </span> <a href="mailto:{{emailDetail.emailId}}">{{ emailDetail.emailId }} </a> 
+			</div>
+			<p class="mrgTp10">Birthday : {{barcodeItem.vCardFields.bday}}</p>
+		</div>
+	</ion-content> 
+</ion-view>

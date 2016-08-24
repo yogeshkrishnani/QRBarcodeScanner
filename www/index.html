@@ -1,0 +1,103 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	
+	<meta charset="UTF-8">
+	<title>Ionic QRBarcode Scanner</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0">
+	<meta name="format-detection" content="telephone=no">
+	
+	<link rel="stylesheet" href="ionic/css/ionic.min.css" />
+	<link rel="stylesheet" href="framework/css/framework.css">
+	<link rel="stylesheet" href="framework/css/menu.css">
+	<link href="lib/ion-floating-menu/dist/ion-floating-menu.css" rel="stylesheet" type="text/css"/>
+	<link rel="stylesheet" href="app/css/main.css">
+	
+	<script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
+	<script type="text/javascript" src="ionic/js/ionic.bundle.js "></script>
+	<script type="text/javascript" src="ionic/js/angular/angular-translate.min.js"></script>
+	<script type="text/javascript" src="ionic/js/angular/ng-cordova.min.js"></script>
+	<script type="text/javascript" src="cordova.js"></script>
+	<script type="text/javascript" src="lib/ion-floating-menu/dist/ion-floating-menu.js" ></script>
+	
+</head>
+<body ng-controller="frameworkCtrl">
+
+	<ion-nav-view class="contentPort" animation="slide-left-right" ></ion-nav-view>
+	
+	<script type="text/javascript" src="js/main.js"></script>
+	<script type="text/javascript" src="js/messages.js"></script>
+	
+	<script type="text/javascript" src="framework/js/lib/js.proto.extend.js"></script>
+	<script type="text/javascript" src="framework/js/lib/jquery.extend.js"></script>
+	
+	<script type="text/javascript" src="framework/js/framework.config.js"></script>
+	<script type="text/javascript" src="app/js/app.config.js"></script>
+	<script type="text/javascript">
+		angular.element(document).ready(function() {
+			angular.bootstrap($("html"), [config.frameworkModuleName]);
+			//angular.bootstrap($("ion-nav-view"), [config.applicationModuleName]);
+		});
+	</script>
+	<script type="text/javascript" src="framework/js/framework.module.js"></script>
+	<script type="text/javascript" src="framework/js/framework.route.js"></script>
+	<script type="text/javascript" src="framework/js/framework.controller.js"></script>
+	
+	<script type="text/javascript" src="app/js/app.module.js"></script>
+	<script type="text/javascript" src="app/js/app.route.js"></script>
+	<script type="text/javascript" src="app/js/app.controller.js"></script>
+	
+	<!-- Directives START -->
+	<script type="text/javascript" src="framework/js/directives/hideOnKeyboardOpen.directive.js"></script>
+	<script type="text/javascript" src="framework/js/directives/labelUp.directive.js"></script>
+	<script type="text/javascript" src="framework/js/directives/maxLengthHandler.directive.js"></script>
+	<script type="text/javascript" src="framework/js/directives/multiImagePicker.directive.js"></script>
+	<script type="text/javascript" src="framework/js/directives/multipleImageViewer.directive.js"></script>
+	<script type="text/javascript" src="framework/js/directives/nativePageTransition.directive.js"></script>
+	<script type="text/javascript" src="framework/js/directives/ngCache.directive.js"></script>
+	<script type="text/javascript" src="framework/js/directives/popoverClose.directive.js"></script>
+	<script type="text/javascript" src="framework/js/directives/tabbedSlideBox.directive.js"></script>
+	<!-- Directives END -->
+	
+	<!-- Filters START -->
+	<script type="text/javascript" src="framework/js/filters/currencyFormat.filter.js"></script>
+	<script type="text/javascript" src="framework/js/filters/ifNull.filter.js"></script>
+	<script type="text/javascript" src="framework/js/filters/percentage.filter.js"></script>
+	<script type="text/javascript" src="framework/js/filters/phnNoFormat.filter.js"></script>
+	<script type="text/javascript" src="framework/js/filters/toFix.filter.js"></script>
+	<!-- Filters END -->
+	
+	<!-- Services START -->
+	<script type="text/javascript" src="framework/js/services/fileUtils.service.js"></script>
+	<script type="text/javascript" src="framework/js/services/multipleImagePicker.service.js"></script>
+	<script type="text/javascript" src="framework/js/services/nativePageTransition.service.js"></script>
+	<script type="text/javascript" src="framework/js/services/auth.service.js"></script>
+	<!-- Services END -->
+    
+    <script type="text/javascript" src="app/modules/login/login.module.js"></script>
+	<script type="text/javascript" src="app/modules/login/login.controller.js"></script>	
+	
+	<script type="text/javascript" src="app/modules/dashboard/dashboard.module.js"></script>
+	<script type="text/javascript" src="app/modules/dashboard/dashboard.controller.js"></script>
+	
+	<script type="text/javascript" src="app/modules/demo/demo.module.js"></script>
+	<script type="text/javascript" src="app/modules/demo/demo.controller.js"></script>
+	
+	<script type="text/javascript" src="app/modules/barcodeDetails/barcodeDetails.module.js"></script>
+	<script type="text/javascript" src="app/modules/barcodeDetails/barcodeDetails.controller.js"></script>
+    
+	<script type="text/javascript" src="plugins/nativePageTransition/nativepageTransition.js"></script>
+	<script type="text/javascript" src="plugins/googlePlusAuth/googlePlusAuth.js"></script>
+	
+	<!-- Plugins -->
+	<script type="text/javascript" src="plugins/util/pluginUtil.js"></script>
+	<script type="text/javascript" src="plugins/nativeKeyboard/nativeKeyboard.js"></script>
+	<script type="text/javascript" src="plugins/nativeDatePicker/nativeDatePicker.js"></script>
+	<script type="text/javascript" src="plugins/camera/camera.js"></script>
+    <script type="text/javascript" src="plugins/secureHash/secureHash.js"></script>
+    <script type="text/javascript" src="plugins/jqRating/jqRating.js"></script>
+    <script type="text/javascript" src="plugins/imageCache/imageCache.js"></script>
+    <script type="text/javascript" src="plugins/nativeToast/nativeToast.js"></script>
+	
+</body>
+</html>

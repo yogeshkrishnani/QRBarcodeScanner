@@ -1,0 +1,64 @@
+/* MENU AND SETTINGS */
+.bar .title.menu-title {
+	text-align: left;
+	font-weight: 600;
+	font-size: 1.25em;
+	color: #444;
+}
+
+.list.side-menu .item {
+	width: 93%;
+	background-color: #ffffff;
+	margin: 5px auto 1px auto;
+	box-shadow: 1px 1px 1px #c9c9c9;
+	padding: 10px 5px;
+	min-height: 55px;
+}
+
+.list.side-menu .item:last-child {
+	margin-bottom: 10px;
+}
+
+.list.side-menu .module-link-group-wrapper{
+	width: 93%;
+	background-color: transparent;
+	margin-top: 5px;
+	margin-right: auto;
+	margin-left: auto;
+	padding: 0;
+	box-shadow: 1px 1px 1px #c9c9c9;
+}	
+
+.list.side-menu .module-link-wrapper{
+	background-color: #ffffff;
+	padding: 0;
+}
+
+.list.side-menu .sub-module-link-wrapper{
+	margin: 1px 0 0 0;
+	padding: 0;
+}
+
+.list.side-menu .sub-module-link-wrapper .item{
+	margin: 0;
+	width: 100%;
+}
+
+.list.side-menu .item img {
+	max-width: 30px;
+	max-height: 30px;
+	top: 12px;
+	left: 12px;
+}
+
+.list.side-menu .item h2 {
+	position: relative;
+	top: 0.5em;
+	padding-left: 10px;
+}
+.list.side-menu .item.sub-module-link {
+	margin: 0px auto;
+}
+.list.side-menu .item.sub-module-link h2 {
+	padding-left: 15px;	
+}
