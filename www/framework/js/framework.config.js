@@ -36,6 +36,7 @@
 		
 	
 		/********************************** Master Config Start ************************************/
+		var useWL = false;
 		var useLogin = true;
 		var authAdapter = "Authentication";
 		var realmName = "UserIdentity";
@@ -129,6 +130,7 @@
 			addFrameworkDependency : addFrameworkDependency,
 			registerApplicationModule : registerApplicationModule,
 			addApplicationDependency : addApplicationDependency,
+			useWL : useWL,
 			useLogin : useLogin
 		}
 		

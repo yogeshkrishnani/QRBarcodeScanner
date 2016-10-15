@@ -13,7 +13,8 @@
 						'ion-email': barcodeItem.category == BARCODE_CATEGORIES.EMAIL,
 						'ion-android-textsms': barcodeItem.category == BARCODE_CATEGORIES.SMS,
 						'ion-link': barcodeItem.category == BARCODE_CATEGORIES.WEBLINK,
-						'ion-android-contact': barcodeItem.category == BARCODE_CATEGORIES.VCARD						
+						'ion-android-contact': barcodeItem.category == BARCODE_CATEGORIES.VCARD,
+						'ion-ios-cart': barcodeItem.category == BARCODE_CATEGORIES.PRODUCT							
 					} " class="icon"></i>
 					<p ng-if="barcodeItem.category != BARCODE_CATEGORIES.WEBLINK">{{ barcodeItem.title }}</p>
 					<a ng-if="barcodeItem.category == BARCODE_CATEGORIES.WEBLINK" href="#" ng-click="openExternalUrl(barcodeItem.title, $event)">{{ barcodeItem.title }}</a>

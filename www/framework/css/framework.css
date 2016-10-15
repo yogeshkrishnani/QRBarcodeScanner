@@ -854,12 +854,12 @@ select#languageOptn {
 .scrollableTabs .scrollableDiv {
 	width: 100%;
     height: 52px;
-    background-color: #000;
     margin-top: 0px;
 }
 .scrollableTabs .tab-item {
 	max-width: initial !important;
     display: table-cell !important;
+	min-width: 100px;
 }
 .scrollableTabs .links, .scrollableTabs .allLinks {
 	min-width: 100%;

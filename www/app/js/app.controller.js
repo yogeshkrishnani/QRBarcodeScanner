@@ -24,7 +24,8 @@ appScope = "";
 			"EMAIL" : 2,
 			"SMS" : 3,
 			"WEBLINK" : 4,
-			"VCARD" : 5
+			"VCARD" : 5,
+			"PRODUCT" : 6
 		}
 		
 		$scope.vCardParser = function(input) {
@@ -135,9 +136,13 @@ appScope = "";
 			//console.log("getBarcodeCategory For : "  + barcodeData.text);
 			
 			var text = barcodeData.text;
+			var format = barcodeData.format;
 			var category = -1;
 			
-			if(text.indexOf("BEGIN:VCARD") == 0) {
+			if(format === "EAN_8" || format === "EAN_13" || format === "UPC_A" || format === "UPC_E") {
+				category = $scope.BARCODE_CATEGORIES.PRODUCT;
+			}
+			else if(text.indexOf("BEGIN:VCARD") == 0) {
 				category = $scope.BARCODE_CATEGORIES.VCARD;
 			}
 			else if(text.indexOf("MATMSG:") == 0) {

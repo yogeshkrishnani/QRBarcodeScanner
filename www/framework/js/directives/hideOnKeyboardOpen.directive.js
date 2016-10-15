@@ -4,7 +4,6 @@
     angular.module(config.appDirectives).directive('hideOnKeyboardOpen',['$timeout' , function($timeout) {
         return {
             restrict: 'A',
-			scope : false,
             link: function (scope, element, attrs) {
             	
             	console.log("hideOnKeyboardOpen Register");

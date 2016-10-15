@@ -12,11 +12,14 @@
  
 scope = "";
 fileUtils = "";
+ionicHistory = "";
 
 (function() {
     'use strict';
     
 	angular.module(config.frameworkModuleName).controller('frameworkCtrl',['$scope', '$state', '$ionicConfig', '$ionicLoading', '$ionicPopup', 'Auth', '$ionicHistory', '$timeout', '$ionicPlatform', '$ionicModal', '$ionicNavBarDelegate', '$ionicSideMenuDelegate', '$translate', 'NativePageTransition', 'FileUtils' , function($scope, $state, $ionicConfig, $ionicLoading, $ionicPopup, Auth, $ionicHistory, $timeout, $ionicPlatform, $ionicModal, $ionicNavBarDelegate, $ionicSideMenuDelegate, $translate, NativePageTransition, FileUtils) {
+		
+		ionicHistory= $ionicHistory;
 		
 		console.log("frameworkCtrl");
 		
@@ -57,7 +60,9 @@ fileUtils = "";
         	$state.go(view);
         	
         	if( $scope.config.isNativePageTransitionEnabled() ) {
-        		NativePageTransition.showNextPage(options, callback);
+				$timeout(function() {
+					NativePageTransition.showNextPage(options, callback);
+				});
         	}
         	else {
         		if (typeof callback == "function") callback();
@@ -111,7 +116,9 @@ fileUtils = "";
             }
             
             if( $scope.config.isNativePageTransitionEnabled() ) {
-        		NativePageTransition.showPrevPage(options, callback);
+				$timeout(function() {
+					NativePageTransition.showPrevPage(options, callback);
+				});
         	}
         	else {
         		if (typeof callback == "function") callback();
@@ -147,37 +154,6 @@ fileUtils = "";
         	
         };
         
-        $scope.overrideIonicBackButton = function($viewScope, doCustomBack) {
-        	
-        	if(angular.isUndefined($viewScope) || angular.isUndefined(doCustomBack) || typeof doCustomBack != "function"){
-        		console.log("Pass valid argumets to overrideIonicBackButton");
-        		return;
-        	}
-        	console.log("In overrideIonicBackButton");
-    		// override soft back
-    		// framework calls $scope.$ionicGoBack when soft back button is pressed
-    		var oldSoftBack = $scope.$ionicGoBack;
-    		$scope.$ionicGoBack = function() {
-    			console.log("Custom back button called");
-    		    doCustomBack();
-    		};
-    		var deregisterSoftBack = function() {
-    		    $scope.$ionicGoBack = oldSoftBack;
-    		};
-
-    		// override hard back
-    		// registerBackButtonAction() returns a function which can be used to deregister it
-    		var deregisterHardBack = $ionicPlatform.registerBackButtonAction(
-    		    doCustomBack, 101
-    		);
-
-    		// cancel custom back behaviour
-    		$viewScope.$on('$destroy', function() {
-    		    deregisterHardBack();
-    		    deregisterSoftBack();
-    		});
-        	
-        };
         /**************************** Ionic Loading Indicator ***************************************/
         $scope.showLoadingIndicator = function(message) {
 
@@ -304,30 +280,35 @@ fileUtils = "";
         }
         
         /*************************************** Authenticate User ********************************************/
-        $scope.authenticationService = function(param , successCallback, failureCallback) {
+		if(config.useWL) {
+			
+			$scope.authenticationService = function(param , successCallback, failureCallback) {
     		
-    		var requestObject = {};
-    		requestObject.record = param;
-    		
-    		var invocationData = {
-    	        adapter : config.authAdapter,
-    	        procedure : 'authenticateUser',
-    	        parameters : [requestObject]
-    	    };
-    		
-    		if(successCallback == undefined) 
-    			successCallback = function() {};
-    		if(failureCallback == undefined) 
-    			failureCallback = function() {};
+				var requestObject = {};
+				requestObject.record = param;
+				
+				var invocationData = {
+					adapter : config.authAdapter,
+					procedure : 'authenticateUser',
+					parameters : [requestObject]
+				};
+				
+				if(successCallback == undefined) 
+					successCallback = function() {};
+				if(failureCallback == undefined) 
+					failureCallback = function() {};
 
-    		var options = {
-    		    onSuccess : successCallback,
-    		    onFailure : failureCallback,
-    		    timeout   : config.connectionTimeout
-    		};
-    		
-    		WL.Client.invokeProcedure(invocationData,options);
-    	};
+				var options = {
+					onSuccess : successCallback,
+					onFailure : failureCallback,
+					timeout   : config.connectionTimeout
+				};
+				
+				WL.Client.invokeProcedure(invocationData,options);
+				
+			};
+		}
+       
     	
     	$scope.reloadApp = function() {
     		//WL.Client.reloadApp();
@@ -344,38 +325,28 @@ fileUtils = "";
     	
         /*************************************** Logout User ********************************************/
     	$scope.logoutUser = function() {
+			
+			$scope.showLoadingIndicator($scope.getMessage("loggingOutMessage"));
+			
 			var logoutSuccess = function(response) {
-				WL.Logger.info("Logout Success : " + JSON.stringify(response));
+				console.log("Logout Success : " + JSON.stringify(response));
 				$scope.hideLoadingIndicator();
 				$scope.logoutUserFromApp();
 			};
 			var logoutFailure = function(response) {
-				WL.Logger.info("Error occurred while logging out : " + JSON.stringify(response));
+				console.log("Error occurred while logging out : " + JSON.stringify(response));
 				$scope.hideLoadingIndicator();
 				$scope.logoutUserFromApp();
 			};
 			
-			var options = {
-				onSuccess : logoutSuccess,
-    		    onFailure : logoutFailure
-			};
-			
-			$scope.showLoadingIndicator();
-			WL.Client.logout(config.realmName, options);
-			
-			/*There is a known issue currently in MobileFirst Platform 7.1
-			APAR PI47591 WL.CLIENT.LOGOUT CALLBACK DOES NOT WORK IN HYBRID PREVIEW
-			http://stackoverflow.com/questions/32303003/wl-client-logout-not-calling-its-onsuccess-or-onfailure-callbacks*/
-			if(WL.Client.getEnvironment() == WL.Environment.PREVIEW) {
-				$timeout(function() {
-					logoutSuccess();
-				}, 2500);
-			}
+			$timeout(function() {
+				logoutSuccess();
+			}, 1000);
         };
         
         $scope.showadapterFailMessage = function(response) {
     		if(response!=undefined)
-    			WL.Logger.info("Adapter Failure! " + JSON.stringify(response));
+    			console.debug("Adapter Failure! " + JSON.stringify(response));
     		
     		$scope.hideLoadingIndicator();
     		$scope.showToast($scope.getMessage("adapterFailTitle"), $scope.getMessage("adapterFailMessage"));
@@ -389,102 +360,120 @@ fileUtils = "";
     	};
     	
     	/************************************ Direct Update Check **************************************/
-        $scope.checkForDirectUpdate = function() {
-            //WL.Client.checkForDirectUpdate();
-            WL.Client.login("wl_directUpdateRealm",{
-		 		onSuccess : function() {},
-		 		onFailure : function() {}
-		 	});
-        };
+		if(config.useWL) {
+			$scope.checkForDirectUpdate = function() {
+				WL.Client.checkForDirectUpdate();
+				WL.Client.login("wl_directUpdateRealm",{
+					onSuccess : function() {},
+					onFailure : function() {}
+				});
+			};
+		}
+       
 
         /**************************** Session Handling Functions  ***************************************/
-        //$scope.AuthRealmChallengeHandler = WL.Client.createChallengeHandler("UserIdentity");
+		if(config.useWL) {
+			
+			$scope.AuthRealmChallengeHandler = WL.Client.createChallengeHandler("UserIdentity");
+			$scope.AuthRealmChallengeHandler.isCustomResponse = function(response) {
+				if (!response || !response.responseJSON || response.responseText === null) {
+					return false;
+				}
+				if (typeof(response.responseJSON.authRequired) !== 'undefined') {
+					$scope.AuthRealmChallengeHandler.handleChallenge(response); //Unauthenticated access attempt
+				} else {
+					return false;
+				}
+			};
+			
+			$scope.AuthRealmChallengeHandler.handleChallenge = function(response) {
+				var authRequired = response.responseJSON.authRequired;
+				if (authRequired == true) {
+					if (Auth.isUserLoggedIn()) {
+						$scope.AuthRealmChallengeHandler.submitFailure();
+						WL.SimpleDialog.show($scope.getMessage("errorTitle"), $scope.getMessage("sessionExpiredMsg"), [{
+							text: 'OK',
+							handler: function() {
+							   WL.Client.reloadApp();
+							}
+						}]);
+					}
+				} else if (authRequired == false) {
+					$scope.AuthRealmChallengeHandler.submitFailure();
+				}
+			};
+			
+		}
+       /*   */
 
-        // $scope.AuthRealmChallengeHandler.isCustomResponse = function(response) {
-            // if (!response || !response.responseJSON || response.responseText === null) {
-                // return false;
-            // }
-            // if (typeof(response.responseJSON.authRequired) !== 'undefined') {
-                // $scope.AuthRealmChallengeHandler.handleChallenge(response); //Unauthenticated access attempt
-            // } else {
-                // return false;
-            // }
-        // };
-
-        // $scope.AuthRealmChallengeHandler.handleChallenge = function(response) {
-            // var authRequired = response.responseJSON.authRequired;
-            // if (authRequired == true) {
-                // if (Auth.isUserLoggedIn()) {
-                    // $scope.AuthRealmChallengeHandler.submitFailure();
-                    // WL.SimpleDialog.show($scope.getMessage("errorTitle"), $scope.getMessage("sessionExpiredMsg"), [{
-                        // text: 'OK',
-                        // handler: function() {
-                           // WL.Client.reloadApp();
-                        // }
-                    // }]);
-                // }
-            // } else if (authRequired == false) {
-                // $scope.AuthRealmChallengeHandler.submitFailure();
-            // }
-        // };
+        /* */
 
         /**************************** Device Back Button Handler  ***************************************/
-        $ionicPlatform.registerBackButtonAction(function(event) {
-            event.preventDefault();
-        }, 100);
-
         $scope.deviceBackButtonHandler = function() {
             console.log("Back button fired -- page : " + window.location.hash);
-            if ($ionicHistory.backView() && $ionicHistory.backView().stateName == "login") {
-                $scope.deviceBackButtonExit();
-            } else {
-                $scope.showPrevPage();
-            }
+			if (config.useLogin && $ionicHistory.backView() && $ionicHistory.backView().stateName == "login") {
+				$scope.deviceBackButtonExit();
+			}
+			else if (!config.useLogin && $ionicHistory.backView() == null) {
+				$scope.deviceBackButtonExit();
+			}
+			else {
+				$scope.showPrevPage();
+			}
         };
 
         $scope.deviceBackButtonExit = function() {
-            WL.Toast.show($scope.getMessage("deviceBackBtnExitMsg"));
-            WL.Logger.info("deviceBackButtonExit fired");
-            WL.App.resetBackButton();
-            WL.App.overrideBackButton(function() {
-                navigator.app.exitApp();
-            });
+            $scope.showToast($scope.getMessage("deviceBackBtnExitMsg"));
+            console.log("deviceBackButtonExit fired");
+			$scope.deRegisterDeviceBackButtonAction();
+			$scope.deRegisterDeviceBackButtonAction = $ionicPlatform.registerBackButtonAction(function (event) { 
+				event.preventDefault();
+				navigator.app.exitApp();
+			}, 999);
             setTimeout(function() {
-                WL.App.resetBackButton();
-                WL.App.overrideBackButton($scope.deviceBackButtonHandler);
+				$scope.deRegisterDeviceBackButtonAction();
+                $scope.deRegisterDeviceBackButtonAction = $ionicPlatform.registerBackButtonAction(function (event) { 
+					event.preventDefault();
+					$scope.deviceBackButtonHandler();
+				}, 999);
             }, 2000);
         };
 
-        if (config.overrideHardwareBackButton)
-            //WL.App.overrideBackButton($scope.deviceBackButtonHandler);
-
+		$ionicPlatform.ready(function() {
+			if (config.overrideHardwareBackButton) {
+				$scope.deRegisterDeviceBackButtonAction = $ionicPlatform.registerBackButtonAction(function (event) { 
+					event.preventDefault();
+					$scope.deviceBackButtonHandler();
+				}, 999);
+			}
+		});
+        
         /******************************* Date picker & Keyboard Plugin *******************************/
         
         $scope.initPlugins = function() {
         	
-        	// var platform = undefined;
+        	var platform = undefined;
     		
-    		// if(ionic.Platform.isAndroid()){
-    			// platform = nativeDatePicker.platforms.ANDROID;
-    		// }else if(ionic.Platform.isIOS()){
-    			// platform = nativeDatePicker.platforms.IOS;
-    		// }
+    		if(ionic.Platform.isAndroid()){
+    			platform = nativeDatePicker.platforms.ANDROID;
+    		}else if(ionic.Platform.isIOS()){
+    			platform = nativeDatePicker.platforms.IOS;
+    		}
     		
-    		// if(typeof platform != undefined) {
-    			// nativeDatePicker.init(platform);
-    		// }
+    		if(typeof platform != undefined) {
+    			nativeDatePicker.init(platform);
+    		}
     		
-    		// // native keyboard right now applied only for ios
-    		// if(ionic.Platform.isIOS() || ionic.Platform.isAndroid()) {
-    			// console.log("Initiating nativeKeyboard plugin");
-    			// nativeKeyboard.init(platform).then(function(res) {
-    				// console.log("nativeKeyboard plugin init success");
-    	            // cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true); // Hide the accessory bar above the keyboard
-    	            // cordova.plugins.Keyboard.disableScroll(true); // Disable keyboard auto scroll
-    			// });
-			// }
+    		if(ionic.Platform.isIOS() || ionic.Platform.isAndroid()) {
+    			console.log("Initiating nativeKeyboard plugin");
+    			nativeKeyboard.init(platform).then(function(res) {
+    				console.log("nativeKeyboard plugin init success");
+    	            cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true); //Hide the accessory bar above the keyboard
+    	            cordova.plugins.Keyboard.disableScroll(true); //Disable keyboard auto scroll
+    			});
+			}
     		
-    		// imageCache.init();
+    		imageCache.init();
         };
         
     	ionic.Platform.ready( $scope.initPlugins );
@@ -532,6 +521,13 @@ fileUtils = "";
     			options.date = new Date(parseInt(dateGetTime));
     		}
     		
+			var successCallback = function(date){
+    			if(ionic.Platform.isIOS()){
+        			document.body.classList.remove('keyboard-open');
+        		}
+    			callbackSuccess(date);
+    		};
+			
     		$scope.showDatePicker(options, function(date){
 				 if (date instanceof Date) {
 					 var formattedDate = $filter('date')(date, options.dateFormat);
@@ -545,12 +541,12 @@ fileUtils = "";
 						 $(element).attr('data-dategettime', date.getTime());
 					 }
 				 };
-    			callbackSuccess(date);
+    			successCallback(date);
     		}, callbackFailure);
     	};
         /******************************* Application Foreground Event *******************************/
         $scope.appResumeEventHandler = function() {
-            WL.Logger.info("Application Comes In Foreground, Checking For Direct Update");
+            console.debug("Application Comes In Foreground, Checking For Direct Update");
             $scope.checkForDirectUpdate();
         };
 
@@ -572,45 +568,49 @@ fileUtils = "";
 		};
 		
 		/********************************** Adapter invocation code start ************************************/
-		$scope.invokeAdapterProcedure = function(obj) {
-			var Q = $.Deferred();
-			var adapterInvocationSucess = function(response) {
-				if(response.responseJSON != undefined && response.responseJSON.authRequired == true) {
-					console.log("User Session Expired");
-				}
-				else if(response.status == 200 && response.responseJSON && response.responseJSON.isSuccessful == true) {
-					Q.resolve(response);
-				}
-				else {
-					$scope.showadapterFailMessage(response);
-				}
-			};
-			var adapterInvocationFailure = function(response) {
-				if(response.responseJSON != undefined && response.responseJSON.authRequired == true) {
-					console.log("User Session Expired");
-				}
-				else {
-					Q.reject(response);
-				}
-			};
+		if(config.useWL) {
+		
+			$scope.invokeAdapterProcedure = function(obj) {
+				var Q = $.Deferred();
+				var adapterInvocationSucess = function(response) {
+					if(response.responseJSON != undefined && response.responseJSON.authRequired == true) {
+						console.log("User Session Expired");
+					}
+					else if(response.status == 200 && response.responseJSON && response.responseJSON.isSuccessful == true) {
+						Q.resolve(response);
+					}
+					else {
+						$scope.showadapterFailMessage(response);
+					}
+				};
+				var adapterInvocationFailure = function(response) {
+					if(response.responseJSON != undefined && response.responseJSON.authRequired == true) {
+						console.log("User Session Expired");
+					}
+					else {
+						Q.reject(response);
+					}
+				};
+				
+				var invocationData = {
+					adapter : obj.adapter,
+					procedure : obj.procedure,
+					parameters : [ obj.param ]
+				};
+				var options = {
+					onSuccess : adapterInvocationSucess,
+					onFailure : adapterInvocationFailure,
+					timeout   : config.connectionTimeout
+				};
+				
+				console.log(invocationData);
+				
+				WL.Client.invokeProcedure(invocationData, options);
+				
+				return Q;
+			}; 
 			
-			var invocationData = {
-				adapter : obj.adapter,
-				procedure : obj.procedure,
-				parameters : [ obj.param ]
-			};
-			var options = {
-			    onSuccess : adapterInvocationSucess,
-			    onFailure : adapterInvocationFailure,
-			    timeout   : config.connectionTimeout
-			};
-			
-			console.log(invocationData);
-			
-			WL.Client.invokeProcedure(invocationData, options);
-			
-			return Q;
-		};
+		}
 		/********************************** Adapter invocation code end ************************************/
 		
 		/********************************** Lazy loading code start  ************************************/
@@ -665,6 +665,29 @@ fileUtils = "";
 				url: "http://textance.herokuapp.com/title/" + url,
 				dataType: "text"
 			});
+		};
+		$scope.searchProduct = function(productCode, apiKey) {
+			
+			var defaultApiKey = "c71bd547c24d999d34ca9995c270fced";
+			apiKey = apiKey || defaultApiKey;
+			
+			var q = $.Deferred();
+			$.ajax({
+				url: "https://api.outpan.com/v2/products/" + productCode + "?apikey=" + apiKey,
+				success : function(data) {
+					q.resolve(data);
+				},
+				error : function(jqXHR, textStatus, errorThrown) {
+					q.fail(data);
+				}
+			});
+			
+			return q;
+		};
+		$scope.getGoogleSearchURL = function(searchItem) {
+			
+			return "https://google.com/search?q=" + searchItem;
+			
 		};
 		$scope.openExternalUrl = function(url, $event) {
 			if($event) {

@@ -7,6 +7,10 @@ var minifyCss = require('gulp-minify-css');
 var rename = require('gulp-rename');
 var sh = require('shelljs');
 
+var plumber = require('gulp-plumber');
+var uglify = require('gulp-uglify');
+var cssmin = require('gulp-cssmin');
+
 var paths = {
   sass: ['./scss/**/*.scss']
 };
@@ -48,4 +52,19 @@ gulp.task('git-check', function(done) {
     process.exit(1);
   }
   done();
+});
+
+
+var gulpSrc = [
+	"www/framework/js/framework.module.js",
+	"www/framework/js/framework.route.js",
+	"www/framework/js/framework.controller.js"
+];
+
+gulp.task('concatMinifyJs', function () {
+  gulp.src(gulpSrc)
+  	.pipe(plumber())
+  	.pipe(uglify({mangle: true})) //mangle will not update variables & functions name
+  	.pipe(concat('framework.min.js'))
+    .pipe(gulp.dest('www/framework/js/'))
 });

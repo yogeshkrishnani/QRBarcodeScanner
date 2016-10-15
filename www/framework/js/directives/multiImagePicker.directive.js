@@ -31,6 +31,8 @@ angular.module(config.appDirectives).directive('multipleImagePicker',['MultipleI
 				
 				if($scope.actionRemove == true) {
 					$scope.capturedImages.splice($scope.imageIndex, 1);
+					$scope.imageCaptions.splice($scope.imageIndex, 1);
+					MultipleImagePickerDelegate.setCapturedImages( $scope.capturedImages );
 				}
 				else {
 					$scope.capturedImages.push(response.fileURI);

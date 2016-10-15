@@ -23,6 +23,16 @@ bScope = "";
 			})
 		}
 		
+		else if($scope.barcodeItem.category == $scope.BARCODE_CATEGORIES.PRODUCT) {
+			$scope.searchProduct($scope.barcodeItem.title).then(function(res){
+				$scope.barcodeItem.productName = res.name;
+				$scope.barcodeItem.googleSearchLink = $scope.getGoogleSearchURL($scope.barcodeItem.productName);
+				if ($scope.$root.$$phase != '$apply'){
+					$scope.$apply();
+				}
+			});
+		}
+		
 		else if($scope.barcodeItem.category == $scope.BARCODE_CATEGORIES.VCARD) {
 			var formattedDetails = {};
 			var vCardFields = $scope.barcodeItem.vCardFields;
