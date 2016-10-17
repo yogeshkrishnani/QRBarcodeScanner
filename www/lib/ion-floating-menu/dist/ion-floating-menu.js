@@ -85,11 +85,13 @@ angular.module('ion-floating-menu', [])
                         $scope.buttonColor = menuOpenColor;
                         $scope.icon = menuOpenIcon;
                         $scope.iconColor = menuOpenIconColor;
+						// angular.element("body").addClass("ion-floating-menu-open")
                     };
                     $scope.setClose = function () {
                         $scope.buttonColor = menuColor;
                         $scope.icon = menuIcon;
                         $scope.iconColor = menuIconColor;
+						// angular.element("body").removeClass("ion-floating-menu-open")
                     };
                     var menuColor = $scope.menuColor || '#2AC9AA';
                     var menuIcon = $scope.menuIcon || 'ion-plus';

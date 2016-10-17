@@ -1,25 +1,22 @@
 dScope = "";
+barcodeService = "";
 (function() {
 	'use strict';
 
-	angular.module('app.dashboard').controller('dashboardController', DashboardController);
+	angular
+	.module('app.dashboard')
+	.controller('dashboardController', DashboardController);
+	
+	DashboardController.$inject = ["$scope", "Auth", "$cordovaBarcodeScanner", "BarcodeService", "$q", "$timeout"]
 
-	function DashboardController($scope, Auth, $cordovaBarcodeScanner) {
+	function DashboardController($scope, Auth, $cordovaBarcodeScanner, BarcodeService, $q, $timeout) {
+		
 		
 		dScope = $scope;
+		barcodeService = BarcodeService;
 		
-		ionic.Platform.ready(function() {
-			
-			
-		});
-		
-		$scope.barcodeItems = [{
-			"title" : "https://www.linkedin.com",
-			"category" : $scope.BARCODE_CATEGORIES.WEBLINK
-		},{
-			"title" : "Yogesh Krishnani",
-			"category" : $scope.BARCODE_CATEGORIES.TEXT
-		}];
+		$scope.showLoadingIndicator();
+		$scope.barcodeItems = new Array();
 		
 		$scope.scanBarcode = function() {
 			if(typeof cordova !== "undefined") {
@@ -55,7 +52,8 @@ dScope = "";
 			var barcodeCategory = $scope.getBarcodeCategory(barcodeData);
 			var barcodeItem = {
 				category : barcodeCategory,
-				barcodeData : barcodeData
+				barcodeData : barcodeData,
+				_id : "" + Date.now()
 			};
 			
 			switch(barcodeCategory) {
@@ -80,7 +78,7 @@ dScope = "";
 				default : 						barcodeItem.title =  barcodeData.text;
 			}
 			
-			$scope.barcodeItems.push(barcodeItem);
+			return BarcodeService.addBarcode(barcodeItem);
 			
 		};
 		
@@ -104,8 +102,50 @@ dScope = "";
 			$scope.showNextPage('app.view.demo');  
 		};
 		
-		$scope.saveBarcodeItem({"text":"MATMSG:TO:yogesh.h.krishnani@gmail.com;SUB:Subject Line;BODY:Message Lines;;","format":"QR_CODE","cancelled":false});
-		$scope.saveBarcodeItem({"text":"SMSTO:9898619162:SMS Line","format":"QR_CODE","cancelled":false});
-		$scope.saveBarcodeItem({"text":"BEGIN:VCARD\nVERSION:3.0\nN:Krishnani;Yogesh\nFN:Yogesh Krishnani\nORG:Streebo\nTITLE:Consultant\nADR:;;88/463;Ahmedabad;Gujarat;382424;India\nTEL;WORK;VOICE:\nTEL;CELL:9898619162\nTEL;FAX:\nEMAIL;WORK;INTERNET:yogesh.h.krishnani@gmail.com\nURL:\nBDAY:07/07/1991\nEND:VCARD\n","format":"QR_CODE","cancelled":false});
+		ionic.Platform.ready(function() {
+			BarcodeService.initDB();
+			
+			BarcodeService.getAllBarcodes().then(function(barcodes) {
+				// console.log("getAll : ", barcodes)
+				if(barcodes.length == 0) {
+					
+					var q = $q.defer();
+					var defs = new Array();
+					
+					defs.push( $scope.saveBarcodeItem({"text":"https://www.linkedin.com","format":"QR_CODE","cancelled":false}) );
+					defs.push( $scope.saveBarcodeItem({"text":"Yogesh Krishnani","format":"QR_CODE","cancelled":false}) );
+					defs.push( $scope.saveBarcodeItem({"text":"MATMSG:TO:yogesh.h.krishnani@gmail.com;SUB:Subject Line;BODY:Message Lines;;","format":"QR_CODE","cancelled":false}) );
+					defs.push( $scope.saveBarcodeItem({"text":"SMSTO:9898619162:SMS Line","format":"QR_CODE","cancelled":false}) );
+					defs.push( $scope.saveBarcodeItem({"text":"BEGIN:VCARD\nVERSION:3.0\nN:Krishnani;Yogesh\nFN:Yogesh Krishnani\nORG:Streebo\nTITLE:Consultant\nADR:;;88/463;Ahmedabad;Gujarat;382424;India\nTEL;WORK;VOICE:\nTEL;CELL:9898619162\nTEL;FAX:\nEMAIL;WORK;INTERNET:yogesh.h.krishnani@gmail.com\nURL:\nBDAY:07/07/1991\nEND:VCARD\n","format":"QR_CODE","cancelled":false}) );
+					
+					$q.all(defs).then(function(){
+						BarcodeService.getAllBarcodes().then(function(barcodes) {
+							$scope.barcodeItems = barcodes;
+							$timeout(function() {
+								
+								$scope.$apply();
+								$scope.hideLoadingIndicator();
+							});
+						});
+					});
+					
+				}
+				else {
+					$scope.barcodeItems = barcodes;
+					$scope.hideLoadingIndicator();
+				}
+			});
+			// Get all barcode records from the database.
+			
+			
+			
+		});
+		
+		$scope.$on("barcodeChangeEvent", function() {
+			console.log("barcodeChangeEvent Fired");
+			$timeout(function() {
+				$scope.$apply();
+			});
+		});
 	}
 })();

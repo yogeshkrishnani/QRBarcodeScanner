@@ -5,7 +5,7 @@
 		   
 		<ion-list class="QRBarcodeHistory" show-delete="false" show-reorder="false">
 
-			<ion-item ng-repeat="barcodeItem in barcodeItems"  item="item" class="item-remove-animate" ng-click="showBarcodeDetails(barcodeItem)">
+			<ion-item ng-repeat="barcodeItem in barcodeItems track by barcodeItem._id"  item="item" class="item-remove-animate" ng-click="showBarcodeDetails(barcodeItem)">
 				
 				<div class="item-icon-left">
 					<i ng-class="{

@@ -13,6 +13,14 @@
 
 /*floating-button*/
 
+/* .ion-floating-menu-open .menu-content .scroll-content:not(.overflow-scroll) {
+    overflow: hidden;
+}
+
+.ion-floating-menu-open .menu-content .scroll-content {
+    pointer-events: none;
+} */
+
 #floating-button {
     bottom: 20px;
     position: fixed;
