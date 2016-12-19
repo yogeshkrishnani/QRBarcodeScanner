@@ -44,6 +44,8 @@
 				location : 'default'
 			});
 			
+/* 			_db = new PouchDB("http://localhost:5984/barcodes")  */
+			
 			_db.info().then(console.log.bind(console));
 		}
 		
@@ -123,8 +125,8 @@
 		function findIndex(array, id) {  
 			var low = 0, high = array.length, mid;
 			while (low < high) {
-			mid = (low + high) >>> 1;
-			array[mid]._id < id ? low = mid + 1 : high = mid
+				mid = (low + high) >>> 1;
+				array[mid]._id < id ? low = mid + 1 : high = mid;
 			}
 			return low;
 		}

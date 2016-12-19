@@ -41,3 +41,10 @@
 .QRBarcodeHistory  .list .item {
     margin: 10px 0px;
 }
+
+.QRBarcodeHistory  .list .item-content a {
+	display: block;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
