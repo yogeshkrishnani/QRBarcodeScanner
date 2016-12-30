@@ -16,7 +16,7 @@
 			<p class="mrgTp10">To : {{barcodeItem.emailFields.to}}</p>
 			<p class="mrgTp10">Subject : {{barcodeItem.emailFields.sub}}</p>
 			<p class="mrgTp10">Body : {{barcodeItem.emailFields.body}}</p>
-			<a href="mailto:{{barcodeItem.emailFields.to}}?subject={{barcodeItem.emailFields.sub}}&body={{barcodeItem.emailFields.body}}">SEND</a>
+			
 		</div>
 		
 		<div class="padding10" ng-if="barcodeItem.category == BARCODE_CATEGORIES.SMS">
@@ -44,4 +44,21 @@
 		</div>
 		
 	</ion-content> 
+	
+	<div ng-if="barcodeItem.category == BARCODE_CATEGORIES.TEXT || barcodeItem.category == BARCODE_CATEGORIES.PRODUCT">
+		<button hide-on-keyboard-open class="fullbutton" type="submit" ng-click="serachOnGoogle(barcodeItem.title, $event)">SEARCH ON GOOGLE</button>
+	</div>
+	
+	<div ng-if="barcodeItem.category == BARCODE_CATEGORIES.WEBLINK">
+		<button hide-on-keyboard-open class="fullbutton" type="submit" ng-click="openExternalUrl(barcodeItem.title, $event)">OPEN LINK</button>
+	</div>
+	
+	<div ng-if="barcodeItem.category == BARCODE_CATEGORIES.EMAIL">
+		<button ng-click="sendEmail(barcodeItem.emailFields.to, barcodeItem.emailFields.sub, barcodeItem.emailFields.body);" hide-on-keyboard-open class="fullbutton" type="submit">SEND EMAIL</button>
+	</div>
+	
+	<div ng-if="barcodeItem.category == BARCODE_CATEGORIES.SMS">
+		<button ng-click="sendSMS(barcodeItem.smsFields.to, barcodeItem.smsFields.msg);" hide-on-keyboard-open class="fullbutton" type="submit">SEND SMS</button>
+	</div>
+			
 </ion-view>

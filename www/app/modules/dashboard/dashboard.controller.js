@@ -54,6 +54,8 @@ barcodeService = "";
 				_id : "" + Date.now()
 			};
 
+			$scope.copyToClipboard(barcodeData.text);
+			
 			switch (barcodeCategory) {
 
 				case BARCODE_CATEGORIES.VCARD:

@@ -699,6 +699,11 @@ ionicHistory = "";
 			}
 			window.open(url, "_system");
 		};
+		$scope.serachOnGoogle = function(searchItem, $event) {
+			
+			$scope.openExternalUrl($scope.getGoogleSearchURL(searchItem), $event);
+			
+		};
 		
     }]);
 

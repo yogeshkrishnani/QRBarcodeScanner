@@ -26,7 +26,10 @@ var Messages = (function() {
 			barcodeError : "Error",
 			barcodeCancelled : "Scanning cancelled",
 			unknownError : "Oops! An unknown error occcured, please try again",
-			deviceNotSupported : "Device not supported"
+			deviceNotSupported : "Device not supported",
+			
+			copyToClipboardSuccess: "Copied To Clipboard",
+			copyToClipboardFailure: "Unknown Error Occured"
 		},
 
 		"hi" : {

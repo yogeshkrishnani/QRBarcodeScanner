@@ -36,7 +36,7 @@
     "cordova-plugin-contacts",
     "cordova-plugin-inappbrowser",
     {
-      "locator": "E:\\Workspaces\\ionicApps\\IonicStarter\\plugins\\cordova-plugin-x-toast",
+      "locator": "https://github.com/EddyVerbruggen/Toast-PhoneGap-Plugin.git",
       "id": "cordova-plugin-x-toast"
     },
     {

@@ -13,7 +13,7 @@ appScope = "";
 (function() {
     'use strict';
     
-	angular.module(config.applicationModuleName).controller('appCtrl',['$scope' , function($scope) {
+	angular.module(config.applicationModuleName).controller('appCtrl',['$scope', '$window', '$cordovaClipboard' , function($scope, $window, $cordovaClipboard) {
 	
 		console.log("in appCrl");
 		
@@ -162,6 +162,30 @@ appScope = "";
 			
 			return category;
 		};
+		$scope.sendEmail = function(to, subject, message) {
+			
+			location.href = "mailto:" + to + "?subject=" + subject + "&body=" + message;
+		
+		};
+		
+		$scope.sendSMS = function(to, message) {
+			
+			location.href = "sms:" + to + "?body=" + message;
+		
+		};
+		
+		$scope.copyToClipboard = function(textToCopy) {
+		
+			$cordovaClipboard
+			.copy(textToCopy)
+			.then(function () {
+				$scope.showToast($scope.getMessage("copyToClipboardSuccess"));
+			}, function () {
+				$scope.showToast($scope.getMessage("copyToClipboardFailure"));
+			});
+
+		};
+		
 
 	}]);
 
