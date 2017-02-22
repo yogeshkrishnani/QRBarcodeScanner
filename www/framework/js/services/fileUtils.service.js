@@ -56,15 +56,15 @@
 				
 				var ft = new FileTransfer();
 				
-				function win(r) {
+				var win = function(r) {
 					console.log("File Upload Success --> " + JSON.stringify(r));
 					q.resolve(r.response);
-				}
+				};
 					
-				function fail(e) {
+				var fail = function(e) {
 					console.log("File Upload Failure --> " + JSON.stringify(e));
 					q.reject(e);
-				}
+				};
 				
 				console.log("Uploading File");
 				
